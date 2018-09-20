@@ -26,13 +26,21 @@ const buttonStyle = {
 	fontWeight: 'bold'
 }
 
+function parseNumber(num){
+	if (num < 1000) {
+		return num.toLocaleString('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}); 
+	} else {
+		return num.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
+	}
+}
+
 const CurrencyBox = (props) => {
 	return (
 		<div style={boxStyle}>
 			<div style={currencyStyle}>
-				<h3>{props.currency} <span style={{cssFloat: 'right'}}>{props.value}</span></h3>
-				<h6><i>{props.currency} - {props.name}</i></h6>
-				<h6>1 USD =  {props.currency} {props.rate}</h6>		
+				<h3>{props.currency} <span style={{cssFloat: 'right'}}>{parseNumber(props.value)}</span></h3>
+				<h6><i><b>{props.currency} - {props.name}</b></i></h6>
+				<h6>1 USD =  {props.currency} {parseNumber(props.rate)}</h6>		
 			</div>
           	
       		<button style={buttonStyle} className="btn btn-main" value={props.currency} onClick={props.handler}>(-)</button>	

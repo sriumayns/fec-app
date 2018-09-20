@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import ShowedCurrency from './components/ShowedCurrency';
+import CurrencyValue from './components/CurrencyValue';
+import CurrencyList from './components/CurrencyList';
+import AddCurrency from './components/AddCurrency';
 
 const api = 'https://api.exchangeratesapi.io/latest?base=USD';
 const api_currency_name = 'https://openexchangerates.org/api/currencies.json';
 
-const addCurrency = {
-  margin: '30px 0',
-  textAlign: 'center'
-}
 
 class App extends Component {
   constructor(props) {
@@ -45,29 +43,6 @@ class App extends Component {
     this.setState({
       value: event.target.value
     })
-  }
-
-  getListOfCurrency() {
-    var currency;
-    var list = this.state.currencyShowed.slice();
-  
-    if(this.state.rates != null) {
-      currency = (
-          <div className="form-group" style={{width:'75%', display: 'inline-block'}}>
-            <select 
-              className="form-control"  
-              defaultValue=""
-              onChange={(event) => this.onChangeSelectCurrency(event)}>
-              <option value="" disabled>-- Choose Currency--</option> : null
-              { this.state.currencyList.map((currency, i) => (
-                list.indexOf(currency) === -1 ?
-                <option value={currency} key={i}>{currency}</option> : null
-              ))}
-            </select>
-          </div>
-      );
-    }
-    return currency;
   }
   
   addMoreCurrency() {
@@ -109,33 +84,28 @@ class App extends Component {
     return (
       <div className="App">
         <div className="header">
-          <h5>USD - United State Dollar</h5>
-          <div className="sub-header">
-            <h1 style={{cssFloat: 'left'}}>USD</h1>
-            <input id="input-value" type="number" value={this.state.value} onChange={(event) => this.onChangeValue(event)}/>
-          </div>
-        </div>
-        <div className="content">
-          { isAPIReady ?
-          <ShowedCurrency 
-            list={this.state.currencyShowed} 
-            rates={this.state.rates}
+          <CurrencyValue
             value={this.state.value}
-            namelist={this.state.currencyName}
-            handler={this.deleteAShowedCurrency.bind(this)}/>
-            : null
-          }
-          <div style={addCurrency}>
-          { !this.state.isAddCurrency ? 
-            <button className="btn-green" style={{width: '100%'}} onClick={()=> this.addMoreCurrency()}>(+) Add More Currencies</button>
-            :
-            <div>
-              {this.getListOfCurrency()}
-              <button className="btn-green" style={{width: '25%'}} onClick={() => this.addNewShowedCurrency()}>Submit</button>            
-            </div>
-          }
-          </div>
+            handlerInput={(event) => this.onChangeValue(event)}/>
+        </div>   
+        { isAPIReady ?
+        <div className="content">
+            <CurrencyList 
+              list={this.state.currencyShowed} 
+              rates={this.state.rates}
+              value={this.state.value}
+              namelist={this.state.currencyName}
+              handler={this.deleteAShowedCurrency.bind(this)}/>
+            <AddCurrency 
+              status={this.state.isAddCurrency}
+              currencyList={this.state.currencyList} 
+              currencyShowed={this.state.currencyShowed} 
+              handlerChange={(event) => this.onChangeSelectCurrency(event)}
+              handlerSubmit={() => this.addNewShowedCurrency()}
+              handlerStatus={()=> this.addMoreCurrency()}/>
         </div>
+        : null
+        }
       </div>
     );
   }
