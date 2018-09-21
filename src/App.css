@@ -11,25 +11,11 @@
 	padding: 0 10% 40px 10%;
 }
 
-.sub-header {
-	display: table-cell;
-	width: 100vw;
-	vertical-align: middle;
-}
-
-#input-value {
-	float: right;
-	font-size: 24px;
-	width: 30%;
-	margin: 7px 0;
-	padding: 5px 10px;
-}
-
 .btn-green {
 	color: #fff;
-    background-color: #28a745;
-    border-style: none;
-    border-radius: 3px;
-    padding: 7.5px;
-    font-weight: 500;
+  background-color: #28a745;
+  border-style: none;
+  border-radius: 3px;
+  padding: 7.5px;
+  font-weight: 500;
 }

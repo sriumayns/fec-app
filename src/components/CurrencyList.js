@@ -1,5 +1,6 @@
 import React from 'react';
 import CurrencyBox from './CurrencyBox';
+import AddCurrency from './AddCurrency';
 
 const api_rates = 'https://api.exchangeratesapi.io/latest?base=USD';
 const api_currency_name = 'https://openexchangerates.org/api/currencies.json';
@@ -20,6 +21,8 @@ class CurrencyList extends React.Component {
       currencyList: null,
       currencyName : null,
       currencyShowed : ['IDR', 'EUR', 'GBP', 'SGD'],
+      selectedCurrency: null,
+      isAddCurrency: false
     };
   }
   
@@ -60,6 +63,40 @@ class CurrencyList extends React.Component {
       )
   }
 
+  
+  addMoreCurrency() {
+    this.setState({
+      isAddCurrency: true,
+    })
+  }
+
+  onChangeSelectCurrency(event) {
+    this.setState({
+      selectedCurrency: event.target.value
+    })
+  }
+
+  addNewShowedCurrency() {
+    var temp = this.state.currencyShowed.slice();
+    if (this.state.selectedCurrency != null) {    
+      temp.push(this.state.selectedCurrency);
+    }   
+    this.setState({
+      isAddCurrency: false,
+      currencyShowed: temp,
+      selectedCurrency: null
+    })
+  }
+
+  deleteAShowedCurrency(e) {
+    var array = this.state.currencyShowed.slice();
+    var index = array.indexOf(e.target.value);
+    if (index !== -1) array.splice(index, 1);
+    this.setState({
+      currencyShowed: array
+    })
+  }
+
   render() {
     const { error, isRatesLoaded, isCurrencyNameLoaded } = this.state;
 
@@ -74,15 +111,22 @@ class CurrencyList extends React.Component {
     } else {
     	return (
     		<div>
-    			{this.props.list.map((currency, i) => (
+    			{this.state.currencyShowed.map((currency, i) => (
             <CurrencyBox 
               currency={currency} 
               name={this.state.currencyName[currency]}  
               rate={this.state.rates[currency]} 
               value={(this.props.value*this.state.rates[currency])} 
               key={i}
-              handler={this.props.handler}/> 
+              handler={this.deleteAShowedCurrency.bind(this)}/> 
           ))}
+          <AddCurrency 
+              status={this.state.isAddCurrency}
+              currencyList={this.state.currencyList} 
+              currencyShowed={this.state.currencyShowed} 
+              handlerChange={(event) => this.onChangeSelectCurrency(event)}
+              handlerSubmit={() => this.addNewShowedCurrency()}
+              handlerStatus={()=> this.addMoreCurrency()}/>
     		</div>
     	)
     }

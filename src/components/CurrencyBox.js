@@ -5,7 +5,7 @@ const boxStyle = {
 	background: 'white',
 	padding: '20px',
 	margin: '20px 0',
-	border: 'solid 2px #777',
+	border: 'solid 1px #ced4da',
 	borderRadius: '10px',
 }
 
